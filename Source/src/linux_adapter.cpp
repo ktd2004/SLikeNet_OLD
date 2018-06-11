@@ -22,12 +22,12 @@
 
 errno_t fopen_s(FILE **pfile, const char *filename, const char *mode)
 {
-	if ((pfile == nullptr) || (filename == nullptr) || (mode == nullptr)) {
+	if ((pfile == NULL) || (filename == NULL) || (mode == NULL)) {
 		return 22; // error: EINVAL
 	}
 
 	FILE *file = fopen(filename, mode);
-	if (file == nullptr) {
+	if (file == NULL) {
 		return errno;
 	}
 
@@ -39,8 +39,8 @@ errno_t localtime_s(struct tm *_tm, const time_t *time)
 {
 	// #med - should actually also check for _*time > _MAX_TIME64_T according to MSDN, but can't seem to find the
 	// definition of _MAX_TIME64_T
-	if ((_tm == nullptr) || (time == nullptr) || (*time == 0)) {
-		if (_tm != nullptr) {
+	if ((_tm == NULL) || (time == NULL) || (*time == 0)) {
+		if (_tm != NULL) {
 			_tm->tm_hour  = -1;
 			_tm->tm_isdst = -1;
 			_tm->tm_mday  = -1;
@@ -62,8 +62,8 @@ errno_t localtime_s(struct tm *_tm, const time_t *time)
 
 errno_t mbstowcs_s(size_t *pReturnValue, wchar_t *wcstr, size_t sizeInWords, const char *mbstr, size_t count)
 {
-	if ((mbstr == nullptr) || ((wcstr == nullptr) && (sizeInWords > 0)) || ((wcstr != nullptr) && (sizeInWords != 0))) {
-		if (wcstr != nullptr) {
+	if ((mbstr == NULL) || ((wcstr == NULL) && (sizeInWords > 0)) || ((wcstr != NULL) && (sizeInWords != 0))) {
+		if (wcstr != NULL) {
 			wcstr[0] = L'\0'; // ensure 0-termination
 		}
 		return 22; // error: EINVAL
@@ -77,28 +77,28 @@ errno_t mbstowcs_s(size_t *pReturnValue, wchar_t *wcstr, size_t sizeInWords, con
 	size_t numCharsWritten = mbstowcs(wcstr, mbstr, numMaxChars);
 	if (numCharsWritten == (size_t)-1) {
 		// invalid multibyte character encountered
-		if (pReturnValue != nullptr) {
+		if (pReturnValue != NULL) {
 			*pReturnValue = 0;
 		}
-		if (wcstr != nullptr) {
+		if (wcstr != NULL) {
 			wcstr[0] = L'\0'; // ensure 0-termination
 		}
 		return 42; // error: EILSEQ
 	}
 
 	if (numCharsWritten == numMaxChars) {
-		if (wcstr != nullptr) {
+		if (wcstr != NULL) {
 			wcstr[0] = L'\0'; // ensure 0-termination
 		}
 		return 34; // error: ERANGE
 	}
 
-	if (pReturnValue != nullptr) {
+	if (pReturnValue != NULL) {
 		*pReturnValue = numCharsWritten + 1; // chars written, including terminating null character
 	}
 
 	// ensure we write a terminating null character (in case there was none in the original converted string)
-	if (wcstr != nullptr) {
+	if (wcstr != NULL) {
 		wcstr[numCharsWritten] = L'\0'; // ensure 0-termination
 	}
 
@@ -107,7 +107,7 @@ errno_t mbstowcs_s(size_t *pReturnValue, wchar_t *wcstr, size_t sizeInWords, con
 
 int sprintf_s(char *buffer, size_t sizeOfBuffer, const char *format, ...)
 {
-	if ((buffer == nullptr) || (sizeOfBuffer == 0) || (format == nullptr)) {
+	if ((buffer == NULL) || (sizeOfBuffer == 0) || (format == NULL)) {
 		return -1;
 	}
 
@@ -130,8 +130,8 @@ int sprintf_s(char *buffer, size_t sizeOfBuffer, const char *format, ...)
 
 errno_t strcat_s(char *strDestination, size_t numberOfElements, const char *strSource)
 {
-	if ((strDestination == nullptr) || (strSource == nullptr)) {
-		if (strDestination != nullptr) {
+	if ((strDestination == NULL) || (strSource == NULL)) {
+		if (strDestination != NULL) {
 			strDestination[0] = '\0'; // ensure trailing \0 is written
 		}
 		return 22; // error: EINVAL
@@ -155,8 +155,8 @@ errno_t strcat_s(char *strDestination, size_t numberOfElements, const char *strS
 
 errno_t strcpy_s(char* strDestination, size_t numberOfElements, const char *strSource)
 {
-	if ((strDestination == nullptr) || (strSource == nullptr)) {
-		if (strDestination != nullptr) {
+	if ((strDestination == NULL) || (strSource == NULL)) {
+		if (strDestination != NULL) {
 			strDestination[0] = '\0'; // ensure trailing \0 is written
 		}
 		return 22; // error: EINVAL
@@ -174,7 +174,7 @@ errno_t strcpy_s(char* strDestination, size_t numberOfElements, const char *strS
 errno_t strncat_s(char *strDest, size_t numberOfElements, const char *strSource, size_t count)
 {
 	// check valid parameters
-	if ((strDest == nullptr) || (strSource == nullptr)) {
+	if ((strDest == NULL) || (strSource == NULL)) {
 		return 22; // error: EINVAL
 	}
 
@@ -206,8 +206,8 @@ errno_t strncat_s(char *strDest, size_t numberOfElements, const char *strSource,
 errno_t strncpy_s(char *strDest, size_t numberOfElements, const char *strSource, size_t count)
 {
 	// check valid parameters
-	if ((numberOfElements == 0) || (strDest == nullptr) || (strSource == nullptr)) {
-		if (strDest != nullptr) {
+	if ((numberOfElements == 0) || (strDest == NULL) || (strSource == NULL)) {
+		if (strDest != NULL) {
 			strDest[0] = '\0'; // ensure trailing \0 is written
 		}
 		return 22; // error: EINVAL
@@ -244,7 +244,7 @@ errno_t strncpy_s(char *strDest, size_t numberOfElements, const char *strSource,
 
 int vsnprintf_s(char *buffer, size_t sizeOfBuffer, size_t count, const char *format, va_list argptr)
 {
-	if ((buffer == nullptr) || (format == nullptr) || (sizeOfBuffer == 0)) {
+	if ((buffer == NULL) || (format == NULL) || (sizeOfBuffer == 0)) {
 		return -1;
 	}
 
@@ -273,8 +273,8 @@ int vsnprintf_s(char *buffer, size_t sizeOfBuffer, size_t count, const char *for
 
 errno_t wcscat_s(wchar_t *strDestination, size_t numberOfElements, const wchar_t *strSource)
 {
-	if ((strDestination == nullptr) || (strSource == nullptr)) {
-		if (strDestination != nullptr) {
+	if ((strDestination == NULL) || (strSource == NULL)) {
+		if (strDestination != NULL) {
 			strDestination[0] = L'\0'; // ensure trailing \0 is written
 		}
 		return 22; // error: EINVAL
@@ -298,8 +298,8 @@ errno_t wcscat_s(wchar_t *strDestination, size_t numberOfElements, const wchar_t
 
 errno_t wcscpy_s(wchar_t* strDestination, size_t numberOfElements, const wchar_t *strSource)
 {
-	if ((strDestination == nullptr) || (strSource == nullptr)) {
-		if (strDestination != nullptr) {
+	if ((strDestination == NULL) || (strSource == NULL)) {
+		if (strDestination != NULL) {
 			strDestination[0] = L'\0'; // ensure trailing \0 is written
 		}
 		return 22; // error: EINVAL

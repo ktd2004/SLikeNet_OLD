@@ -447,7 +447,7 @@ namespace DataStructures
 	{
 		node * original_copy_pointer;
 		node *last;
-		node *save_position = nullptr;
+		node *save_position = NULL;
 
 		if ( original_copy.list_size == 0 )
 		{
@@ -530,7 +530,7 @@ namespace DataStructures
 	{
 		node * original_copy_pointer;
 		node *last;
-		node *save_position = nullptr;
+		node *save_position = NULL;
 
 		if ( ( &original_copy ) != this )
 		{

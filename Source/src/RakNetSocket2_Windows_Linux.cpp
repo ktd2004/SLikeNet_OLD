@@ -37,12 +37,12 @@ void GetMyIP_Windows(SystemAddress addresses[MAXIMUM_NUMBER_OF_INTERNAL_IDS], co
 {
 	ULONG outBufLen = 45 * 1024; // reserve 45 KB of memory which is the upper limit taken from the sample in MSDN (ie. 15 KB * 3 iterations)
 	PIP_ADAPTER_ADDRESSES pAddresses = static_cast<IP_ADAPTER_ADDRESSES*>(rakMalloc_Ex(outBufLen, _FILE_AND_LINE_));
-	if (pAddresses == nullptr) {
+	if (pAddresses == NULL) {
 		// #med - error logging and/or throw exception?
 		return;
 	}
 
-	DWORD error = GetAdaptersAddresses(addressFamily, GAA_FLAG_SKIP_ANYCAST | GAA_FLAG_SKIP_MULTICAST | GAA_FLAG_SKIP_FRIENDLY_NAME, nullptr, pAddresses, &outBufLen);
+	DWORD error = GetAdaptersAddresses(addressFamily, GAA_FLAG_SKIP_ANYCAST | GAA_FLAG_SKIP_MULTICAST | GAA_FLAG_SKIP_FRIENDLY_NAME, NULL, pAddresses, &outBufLen);
 	if (error != ERROR_SUCCESS) {
 		// #med - error logging and/or throw exception?
 		rakFree_Ex(pAddresses, _FILE_AND_LINE_);
@@ -51,13 +51,13 @@ void GetMyIP_Windows(SystemAddress addresses[MAXIMUM_NUMBER_OF_INTERNAL_IDS], co
 
 	PIP_ADAPTER_ADDRESSES pCurAdapter = pAddresses;
 	size_t outAddressIndex = 0;
-	while ((pCurAdapter != nullptr) && (outAddressIndex < MAXIMUM_NUMBER_OF_INTERNAL_IDS)) {
+	while ((pCurAdapter != NULL) && (outAddressIndex < MAXIMUM_NUMBER_OF_INTERNAL_IDS)) {
 		// skip loopback adapters
 		if (pCurAdapter->IfType != IF_TYPE_SOFTWARE_LOOPBACK) {
 
 			// parse the adapter's unicast addresses
 			PIP_ADAPTER_UNICAST_ADDRESS curAddress = pCurAdapter->FirstUnicastAddress;
-			while (curAddress != nullptr) {
+			while (curAddress != NULL) {
 				// note: we'd only requested IPV4 addresses, so this check should be redundant - double-check just to be on the safe side
 				// #med - log a warning
 				const ADDRESS_FAMILY curAddressFamily = curAddress->Address.lpSockaddr->sa_family;
@@ -123,16 +123,16 @@ void GetMyIP_Windows(SystemAddress addresses[MAXIMUM_NUMBER_OF_INTERNAL_IDS], co
 // based on https://stackoverflow.com/questions/212528/get-the-ip-address-of-the-machine#265978
 void GetMyIP_Linux(SystemAddress addresses[MAXIMUM_NUMBER_OF_INTERNAL_IDS], const bool includeIPv6)
 {
-	struct ifaddrs *pAddresses = nullptr;
+	struct ifaddrs *pAddresses = NULL;
 
 	// #med - add error check to getifaddrs()-call
 	getifaddrs(&pAddresses);
 
 	struct ifaddrs *pCurAdapter = pAddresses;
 	size_t outAddressIndex = 0;
-	while ((pCurAdapter != nullptr) && (outAddressIndex < MAXIMUM_NUMBER_OF_INTERNAL_IDS)) {
+	while ((pCurAdapter != NULL) && (outAddressIndex < MAXIMUM_NUMBER_OF_INTERNAL_IDS)) {
 		// skip interfaces which don't have any address assigned (according to the manual, this would only apply for BSD, but still we'd check for null here just in case)
-		if (pCurAdapter->ifa_addr != nullptr) {
+		if (pCurAdapter->ifa_addr != NULL) {
 			// skip loopback adapters
 			if ((pCurAdapter->ifa_flags & IFF_LOOPBACK) == 0) {
 				if (pCurAdapter->ifa_addr->sa_family == AF_INET) {
@@ -187,7 +187,7 @@ void GetMyIP_Linux(SystemAddress addresses[MAXIMUM_NUMBER_OF_INTERNAL_IDS], cons
 		pCurAdapter = pCurAdapter->ifa_next;
 	}
 
-	if (pAddresses != nullptr)
+	if (pAddresses != NULL)
 		freeifaddrs(pAddresses);
 
 	while (outAddressIndex < MAXIMUM_NUMBER_OF_INTERNAL_IDS) {

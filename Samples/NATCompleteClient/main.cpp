@@ -35,9 +35,9 @@
 #include "slikenet/osx_adapter.h"
 
 // To include miniupnp, see Samples\NATCompleteClient\readme.txt
-#include "miniupnpc.h"
-#include "upnpcommands.h"
-#include "upnperrors.h"
+//#include "miniupnpc.h"
+//#include "upnpcommands.h"
+//#include "upnperrors.h"
 
 using namespace SLNet;
 
@@ -53,7 +53,7 @@ enum SampleResult
 	SUCCEEDED
 };
 
-#define SUPPORT_UPNP FAILED
+//#define SUPPORT_UPNP FAILED
 #define SUPPORT_NAT_TYPE_DETECTION FAILED
 #define SUPPORT_NAT_PUNCHTHROUGH PENDING
 #define SUPPORT_ROUTER2 FAILED
@@ -161,7 +161,7 @@ SystemAddress ConnectBlocking(SLNet::RakPeerInterface *rakPeer, const char *host
 	// #med - review --- at least we'd add a sleep interval here - also review whether the behavior is correct to only check the very first received packet (old RakNet code was bogus in this regards)
 	do {
 		packet = rakPeer->Receive();
-	} while (packet == nullptr);
+	} while (packet == NULL);
 
 	if (packet->data[0] == ID_CONNECTION_REQUEST_ACCEPTED)
 		returnvalue = packet->systemAddress;
@@ -172,6 +172,7 @@ SystemAddress ConnectBlocking(SLNet::RakPeerInterface *rakPeer, const char *host
 
 	return returnvalue;
 }
+#if 0
 struct UPNPFramework : public SampleFramework
 {
 	UPNPFramework() { sampleResult=SUPPORT_UPNP;} 
@@ -297,6 +298,7 @@ struct UPNPFramework : public SampleFramework
 	}
 
 };
+#endif
 struct NatTypeDetectionFramework : public SampleFramework
 {
 	// Set to FAILED to skip this test
@@ -825,7 +827,7 @@ void PrintPacketMessages(Packet *packet, RakPeerInterface *rakPeer)
 
 enum FeatureList
 {
-	_UPNPFramework,
+	//_UPNPFramework,
 	_NatTypeDetectionFramework,
 	_NatPunchthoughFramework,
 	_Router2Framework,
@@ -859,7 +861,7 @@ int main(void)
 
 	SampleFramework *samples[FEATURE_LIST_COUNT];
 	unsigned int i=0;
-	samples[i++] = new UPNPFramework;
+	//samples[i++] = new UPNPFramework;
 	samples[i++] = new NatTypeDetectionFramework;
 	samples[i++] = new NatPunchthoughClientFramework;
 	samples[i++] = new Router2Framework;
@@ -885,7 +887,7 @@ int main(void)
 	if (hasServer==false)
 		printf("Note: Only UPNP and Router2 are supported without a server\nYou may want to consider using the Lobby2/Steam project. They host the\nservers for you.\n\n");
 
-	FeatureList currentStage=_UPNPFramework;
+	FeatureList currentStage=_NatTypeDetectionFramework;
 
 	if (hasServer==false)
 	{

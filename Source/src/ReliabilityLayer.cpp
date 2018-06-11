@@ -244,7 +244,7 @@ static int waitFlag=-1;
 using namespace SLNet;
 
 SplitPacketSort::SplitPacketSort() :
-	m_data(nullptr),
+	m_data(NULL),
 	m_allocationSize(0),
 	m_addedPacketsCount(0)
 {
@@ -258,13 +258,13 @@ SplitPacketSort::~SplitPacketSort()
 
 void SplitPacketSort::Preallocate(InternalPacket *internalPacket, const char *file, unsigned int line)
 {
-	RakAssert(m_data == nullptr);
+	RakAssert(m_data == NULL);
 	m_allocationSize = internalPacket->splitPacketCount;
 	m_data = OP_NEW_ARRAY<InternalPacket*>(m_allocationSize, file, line);
 	m_packetId = internalPacket->splitPacketId;
 
 	for (size_t i = 0; i < m_allocationSize; ++i)
-		m_data[i] = nullptr;
+		m_data[i] = NULL;
 }
 
 bool SplitPacketSort::AllPacketsAdded() const
@@ -284,25 +284,25 @@ unsigned int SplitPacketSort::GetNumAddedPackets() const
 
 SplitPacketIdType SplitPacketSort::GetPacketId() const
 {
-	RakAssert(m_data != nullptr);
+	RakAssert(m_data != NULL);
 	return m_packetId;
 }
 
 InternalPacket*& SplitPacketSort::operator[](size_t index)
 {
-	RakAssert(m_data != nullptr);
+	RakAssert(m_data != NULL);
 	RakAssert(index < m_allocationSize);
 	return m_data[index];
 }
 
 bool SplitPacketSort::Add(InternalPacket *internalPacket)
 {
-	RakAssert(m_data != nullptr);
+	RakAssert(m_data != NULL);
 	RakAssert(internalPacket->splitPacketIndex < m_allocationSize);
 	RakAssert(m_packetId == internalPacket->splitPacketId);
-	RakAssert(m_data[internalPacket->splitPacketIndex] == nullptr);
+	RakAssert(m_data[internalPacket->splitPacketIndex] == NULL);
 
-	if (m_data[internalPacket->splitPacketIndex] == nullptr) {
+	if (m_data[internalPacket->splitPacketIndex] == NULL) {
 		m_data[internalPacket->splitPacketIndex] = internalPacket;
 		++m_addedPacketsCount;
 		return true;
@@ -543,7 +543,7 @@ void ReliabilityLayer::FreeThreadSafeMemory( void )
 		for (j=0; j < splitPacketChannelList[i]->splitPacketList.GetAllocSize(); j++)
 		{
 			internalPacket = splitPacketChannelList[i]->splitPacketList[j];
-			if (internalPacket != nullptr) {
+			if (internalPacket != NULL) {
 				FreeInternalPacketData(internalPacket, _FILE_AND_LINE_);
 				ReleaseToInternalPacketPool(internalPacket);
 			}
@@ -3851,14 +3851,14 @@ bool ReliabilityLayer::ResendBufferOverflow(void) const
 ReliabilityLayer::MessageNumberNode* ReliabilityLayer::GetMessageNumberNodeByDatagramIndex(DatagramSequenceNumberType index, CCTimeType *timeSent)
 {
 	if (datagramHistory.IsEmpty())
-		return nullptr;
+		return NULL;
 
 	if (congestionManager.LessThan(index, datagramHistoryPopCount))
-		return nullptr;
+		return NULL;
 
 	DatagramSequenceNumberType offsetIntoList = index - datagramHistoryPopCount;
 	if (offsetIntoList >= datagramHistory.Size())
-		return nullptr;
+		return NULL;
 
 	*timeSent=datagramHistory[offsetIntoList].timeSent;
 	return datagramHistory[offsetIntoList].head;

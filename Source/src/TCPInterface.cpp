@@ -317,7 +317,7 @@ void TCPInterface::Stop(void)
 	// #low review whether we'd rather use PopInaccurate() here (i.e. check whether related threads accessing the queue terminated already)
 	// consider even adding a dtor to Packet which would then clear its data (at this point drop this explicit packet deallocation here)
 	SLNet::Packet* packet = incomingMessages.Pop();
-	while (packet != nullptr) {
+	while (packet != NULL) {
 		DeallocatePacket(packet);
 		packet = incomingMessages.Pop();
 	}
