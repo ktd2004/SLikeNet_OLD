@@ -2363,6 +2363,10 @@ SystemAddress RakPeer::GetExternalID( const SystemAddress target ) const
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+void RakPeer::SetMyGUID(const RakNetGUID& guid)
+{
+    myGuid = guid;
+}
 const RakNetGUID RakPeer::GetMyGUID(void) const
 {
 	return myGuid;

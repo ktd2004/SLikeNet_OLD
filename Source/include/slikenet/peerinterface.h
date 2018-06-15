@@ -395,6 +395,8 @@ public:
 	/// \param[in] target Which remote system you are referring to for your external ID.  Usually the same for all systems, unless you have two or more network cards.
 	virtual SystemAddress GetExternalID( const SystemAddress target ) const=0;
 
+	/// Set my own GUID
+	virtual void SetMyGUID(const RakNetGUID& guid)=0;
 	/// Return my own GUID
 	virtual const RakNetGUID GetMyGUID(void) const=0;
 
