@@ -61,12 +61,16 @@ enum FeatureList
 
 static unsigned short DEFAULT_RAKPEER_PORT=61111;
 
-#define NatTypeDetectionServerFramework_Supported QUERY
-#define NatPunchthroughServerFramework_Supported QUERY
-#define RelayPlugin_Supported QUERY
-#define UDPProxyCoordinatorFramework_Supported UNSUPPORTED
-#define UDPProxyServerFramework_Supported UNSUPPORTED
-#define CloudServerFramework_Supported QUERY
+#define NatTypeDetectionServerFramework_Supported UNSUPPORTED
+#define NatPunchthroughServerFramework_Supported SUPPORTED
+#define RelayPlugin_Supported UNSUPPORTED
+#define UDPProxyCoordinatorFramework_Supported SUPPORTED
+#define UDPProxyServerFramework_Supported SUPPORTED
+#define CloudServerFramework_Supported UNSUPPORTED
+
+
+#define UDPPROXYCOORDINATOR_PASSWORD	"realhorse"
+
 
 struct SampleFramework
 {
@@ -204,7 +208,8 @@ struct UDPProxyCoordinatorFramework : public SampleFramework
 			udppc = new UDPProxyCoordinator;
 			rakPeer->AttachPlugin(udppc);
 
-			char password[512];
+			char password[512] = UDPPROXYCOORDINATOR_PASSWORD;
+#if KTD_TODO
 			printf("Create password for UDPProxyCoordinator: ");
 			Gets(password,sizeof(password));
 			if (password[0]==0)
@@ -212,6 +217,7 @@ struct UDPProxyCoordinatorFramework : public SampleFramework
 				password[0]='a';
 				password[1]=0;
 			}
+#endif
 			udppc->SetRemoteLoginPassword(password);
 		}
 	}
@@ -323,9 +329,12 @@ struct UDPProxyServerFramework : public SampleFramework, public UDPProxyServerRe
 			SystemAddress coordinatorAddress=SelectAmongConnectedSystems(rakPeer, "UDPProxyCoordinator");
 			if (coordinatorAddress== SLNet::UNASSIGNED_SYSTEM_ADDRESS)
 			{
+#if KTD_TODO
 				printf("Warning: RakPeer is not currently connected to any system.\nEnter option:\n(1). UDPProxyCoordinator is on localhost\n(2). Connect to a remote system\n(3). Fail.\nOption: ");
 				int ch=_getche();
 				printf("\n");
+#endif
+				const int ch = '1';
 				if (ch=='1' || ch==13) // 13 is just pressing return
 				{
 					coordinatorAddress=rakPeer->GetInternalID(UNASSIGNED_SYSTEM_ADDRESS,0);
@@ -348,7 +357,8 @@ struct UDPProxyServerFramework : public SampleFramework, public UDPProxyServerRe
 				}
 			}
 			
-			char password[512];
+			char password[512] = UDPPROXYCOORDINATOR_PASSWORD;
+#if KTD_TODO
 			printf("Enter password used with UDPProxyCoordinator: ");
 			Gets(password,sizeof(password));
 			if (password[0]==0)
@@ -356,6 +366,7 @@ struct UDPProxyServerFramework : public SampleFramework, public UDPProxyServerRe
 				password[0]='a';
 				password[1]=0;
 			}
+#endif
 
 			udpps = new UDPProxyServer;
 			udpps->SetResultHandler(this);
